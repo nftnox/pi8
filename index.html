@@ -479,7 +479,7 @@ textarea {
             <a href="#"><span class="material-icons">home</span> Home</a>
             <a href="#"><span class="material-icons">group</span> Team</a>
             <a href="#" id="chat-link"><span class="material-icons">chat</span> Chat</a>
-            <a href="javascript:void(0);" id="profile-link"><span class="material-icons">person</span> Profile</a>
+            <a href="#"><span class="material-icons">person</span> Profile</a>
 
         </nav>
     
@@ -488,22 +488,13 @@ textarea {
             <a href="#"><span class="material-icons">home</span> Home</a>
             <a href="#"><span class="material-icons">group</span> Team</a>
             <a href="#" id="chat-link"><span class="material-icons">chat</span> Chat</a>
-            <a href="javascript:void(0);" id="profile-link-toggle"><span class="material-icons">person</span> Profile</a>
+            <a href="#"><span class="material-icons">person</span> Profile</a>
 
         </nav>
     </header>
 
 
-    <script>
-        document.getElementById('profile-link').addEventListener('click', () => {
-    window.location.href = `profil.html?username=${userParam}`;
-});
-
-document.getElementById('profile-link-toggle').addEventListener('click', () => {
-    window.location.href = `profil.html?username=${userParam}`;
-});
-
-    </script>
+   
 
     <div id="chat-modal">
         <div id="chat-header">
@@ -662,7 +653,7 @@ document.getElementById('close-image-modal').addEventListener('click', function(
         shareIcon.addEventListener('click', async () => {
             const shareData = {
                 title: 'Poziv za pridruživanje',
-                text: `Zdravo, pridruži mi se na https://nftnox.github.io/pi5/registracija.html. Moj kod je ${userParam}`
+                text: `Zdravo, pridruži mi se na https://nftnox.github.io/pi8/registracija.html. Moj kod je ${userParam}`
             };
 
             try {
@@ -769,7 +760,7 @@ document.getElementById('close-image-modal').addEventListener('click', function(
             }
         }
 
-        async function loadUserData() {
+        async function loadUserData() {                 //glavni dio za trenutnu cijenu//
             const docRef = doc(db, 'network', userId);
             const docSnap = await getDoc(docRef);
 
@@ -872,9 +863,17 @@ async function loadProducts() {
             ownerDiv.style.cursor = 'pointer';
 
             // Klikom na ime vlasnika otvara se njegov profil
-            ownerDiv.addEventListener('click', () => {
-    window.location.href = `profil.html?username=${productData.owner}`;
+         // U kodu za prikaz novog vlasnika
+        // Kada se klikne na ime vlasnika proizvoda
+        ownerDiv.addEventListener('click', () => {
+    const prijavljeniKorisnik = localStorage.getItem('loggedInUser');
+    const trenutnaCijena = document.getElementById('amount').innerText; // Trenutna cijena prijavljenog korisnika
+    window.location.href = `profile.html?ime=${productData.ownerName}&loggedInUser=${prijavljeniKorisnik}&trenutnaCijena=${trenutnaCijena}`;
 });
+
+
+
+
 
         }
 
@@ -930,9 +929,11 @@ async function loadProducts() {
                     ownerDiv.style.cursor = 'pointer';
 
                     // Klikom na ime vlasnika otvara se njegov profil
-                    ownerDiv.addEventListener('click', () => {
-                        window.location.href = `profil.html?username=${username}`;
-                    });
+                   // U kodu za prikaz novog vlasnika
+ownerDiv.addEventListener('click', () => {
+    window.location.href = `profile.html?ime=${productData.ownerName}`;
+});
+
 
                     productDiv.appendChild(ownerDiv);
 
@@ -958,12 +959,13 @@ async function loadProducts() {
 // Pozovi funkciju za učitavanje proizvoda nakon što se stranica učita
 document.addEventListener('DOMContentLoaded', loadProducts);
 
+// Spremi ime prijavljenog korisnika u localStorage
+localStorage.setItem('loggedInUser', userParam);
 
 
 
 
-
-
+/////////////////CHAAAAAAAAAAAAAAAAAAAAAAAAAAAAT//////////////////////////////
 
         let isChatOpen = false; // Pratimo da li je chat otvoren
 let selectedUserName = ''; // Čuvamo ime trenutno odabranog korisnika
@@ -1244,12 +1246,6 @@ async function acceptChatRequest(requestId) {
 
 
 
-
-
-
-
-
-
 // Event listener za desktop meni
 document.getElementById('chat-link').addEventListener('click', async () => {
     const chatModal = document.getElementById('chat-modal');
@@ -1441,7 +1437,6 @@ function listenForNewMessages() {
 
 
 
-
 // Zatvori chat kada korisnik klikne na X dugme
 document.getElementById('close-chat').addEventListener('click', () => {
     closeChat(); // Zatvori chat
@@ -1579,7 +1574,7 @@ document.getElementById('send-image').addEventListener('click', () => {
 
 
 
-
+///////////////////////VIDEOPOZIV///////////////////////////////
 
 // Configuration for WebRTC
 const configuration = {
@@ -1946,6 +1941,13 @@ setupIncomingCallListener();
 
 
 
+
+document.addEventListener('DOMContentLoaded', () => {
+    const prijavljeniKorisnik = localStorage.getItem('loggedInUser');
+    if (prijavljeniKorisnik) {
+        document.getElementById('ime').innerText = prijavljeniKorisnik; // Prikaži ime prijavljenog korisnika
+    }
+});
 
 
     // Učitaj proizvode nakon učitavanja stranice
